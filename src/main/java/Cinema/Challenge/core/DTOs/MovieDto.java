@@ -1,4 +1,9 @@
 package Cinema.Challenge.core.DTOs;
 
-public record MovieDto() {
-}
+import java.util.Optional;
+
+public record MovieDto(
+        String title,
+        String synopsis,
+        Optional<String> releaseDate
+) { }
