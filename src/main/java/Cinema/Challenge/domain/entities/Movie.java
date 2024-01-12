@@ -1,6 +1,7 @@
 package Cinema.Challenge.domain.entities;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -9,11 +10,12 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.UUID;
 
-@Entity(name = "movie")
+@Entity
 @Table(name = "Movie")
 @Data
 @EqualsAndHashCode(of = "id")
 public class Movie {
+    @Id
     public UUID id;
     public LocalDateTime createdAt;
     public String title;
