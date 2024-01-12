@@ -4,6 +4,7 @@ import Cinema.Challenge.core.DTOs.MovieDto;
 import Cinema.Challenge.data.interfaces.ICreate;
 import Cinema.Challenge.domain.entities.Movie;
 import Cinema.Challenge.presentation.Exceptions.MovieAlreadyExist;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,7 @@ public class CreateMovieController {
     }
 
     @PostMapping(value = "/movies")
-    public ResponseEntity handle(@RequestBody MovieDto movieDto) {
+    public ResponseEntity handle(@RequestBody @Valid MovieDto movieDto) {
         try {
             Movie movie = this.create.perform(movieDto);
             return ResponseEntity.ok(movie);
