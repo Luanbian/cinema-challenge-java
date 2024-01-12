@@ -3,6 +3,7 @@ package Cinema.Challenge.presentation.controllers;
 import Cinema.Challenge.core.DTOs.MovieDto;
 import Cinema.Challenge.data.interfaces.ICreate;
 import Cinema.Challenge.domain.entities.Movie;
+import Cinema.Challenge.presentation.Exceptions.MovieAlreadyExist;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -22,7 +23,15 @@ public class CreateMovieController {
 
     @PostMapping(value = "/movies")
     public ResponseEntity handle(@RequestBody MovieDto movieDto) {
-        Movie movie = this.create.perform(movieDto);
-        return ResponseEntity.ok(movie);
+        try {
+            Movie movie = this.create.perform(movieDto);
+            return ResponseEntity.ok(movie);
+        } catch (Exception ex) {
+            if (ex instanceof MovieAlreadyExist) {
+                return ResponseEntity.badRequest().body(ex.getMessage());
+            } else {
+                return ResponseEntity.internalServerError().body(ex);
+            }
+        }
     }
 }
