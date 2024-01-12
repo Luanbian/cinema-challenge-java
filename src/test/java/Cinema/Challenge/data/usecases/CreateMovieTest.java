@@ -4,18 +4,24 @@ import Cinema.Challenge.core.DTOs.MovieDto;
 import static org.junit.jupiter.api.Assertions.*;
 
 import Cinema.Challenge.domain.entities.Movie;
-import InMemory.Movie.CreateInMemory;
+import Cinema.Challenge.infra.interfaces.ICreateRepository;
+import Cinema.Challenge.presentation.Exceptions.MovieAlreadyExist;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+
+import static org.mockito.Mockito.doThrow;
+
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Optional;
-
+@ExtendWith(MockitoExtension.class)
 public class CreateMovieTest {
-    private final CreateMovie sut;
-
-    public CreateMovieTest () {
-        CreateInMemory repository = new CreateInMemory();
-        this.sut = new CreateMovie(repository);
-    }
+    @InjectMocks
+    public CreateMovie sut;
+    @Mock
+    public ICreateRepository<Movie> repository;
 
     @Test
     public void should_be_able_to_create_movie_with_correct_params() {
@@ -31,5 +37,16 @@ public class CreateMovieTest {
         assertEquals("Title_test", result.getTitle());
         assertEquals("synopsis_test", result.getSynopsis());
         assertEquals("release_test", result.getReleaseDate());
+    }
+    @Test
+    public void should_throw_if_movie_already_exists() throws MovieAlreadyExist {
+        MovieDto data = new MovieDto(
+                "Title_test",
+                "synopsis_test",
+                Optional.of("release_test")
+        );
+        Movie movie = Movie.create(data.title(), data.synopsis(), data.releaseDate());
+        doThrow(new MovieAlreadyExist()).when(repository).create(movie);
+        assertThrows(MovieAlreadyExist.class, () -> repository.create(movie));
     }
 }
