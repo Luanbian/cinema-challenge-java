@@ -3,6 +3,10 @@ package Cinema.Challenge.infra.interfaces;
 import Cinema.Challenge.domain.entities.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
-public interface MovieJPARepository extends JpaRepository<Movie, UUID> {}
+public interface MovieJPARepository extends JpaRepository<Movie, UUID> {
+    Optional<List<Movie>> findByTitle(String title);
+}
