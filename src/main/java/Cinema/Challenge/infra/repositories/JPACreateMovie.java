@@ -4,7 +4,9 @@ import Cinema.Challenge.domain.entities.Movie;
 import Cinema.Challenge.infra.interfaces.ICreateRepository;
 import Cinema.Challenge.infra.interfaces.MovieJPARepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
+@Service
 public class JPACreateMovie implements ICreateRepository<Movie> {
     @Autowired
     MovieJPARepository movieJPARepository;

@@ -5,12 +5,17 @@ import Cinema.Challenge.data.interfaces.ICreate;
 import Cinema.Challenge.domain.entities.Movie;
 import Cinema.Challenge.infra.interfaces.ICreateRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.Optional;
-
+@Service
 public class CreateMovie implements ICreate<Movie, MovieDto> {
+    private final ICreateRepository<Movie> repository;
+
     @Autowired
-    ICreateRepository<Movie> repository;
+    public CreateMovie(ICreateRepository<Movie> repository) {
+        this.repository = repository;
+    }
 
     @Override
     public Movie perform(MovieDto data) {
