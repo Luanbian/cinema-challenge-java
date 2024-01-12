@@ -3,7 +3,6 @@ package Cinema.Challenge.presentation.controllers;
 import Cinema.Challenge.core.DTOs.MovieDto;
 import Cinema.Challenge.data.interfaces.ICreate;
 import Cinema.Challenge.domain.entities.Movie;
-import Cinema.Challenge.presentation.Exceptions.MovieAlreadyExist;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
