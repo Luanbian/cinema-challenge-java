@@ -21,8 +21,8 @@ public class JPACreateMovie implements ICreateRepository<Movie> {
 
     @Override
     public void create(Movie data) {
-        Optional<List<Movie>> movies = this.movieJPARepository.findByTitle(data.getTitle());
-        if(movies.isPresent()) {
+        List<Movie> movies = this.movieJPARepository.findByTitle(data.getTitle());
+        if(!movies.isEmpty()) {
             throw new MovieAlreadyExist();
         }
         this.movieJPARepository.save(data);

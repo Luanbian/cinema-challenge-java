@@ -13,6 +13,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 import static org.mockito.Mockito.*;
@@ -31,7 +32,7 @@ public class JPACreateMovieTest {
                 "fake_sinopsys",
                 Optional.of("fake_release")
         );
-        when(movieJPARepository.findByTitle(movie.getTitle())).thenReturn(Optional.empty());
+        when(movieJPARepository.findByTitle(movie.getTitle())).thenReturn(List.of());
         sut.create(movie);
         verify(movieJPARepository, times(1)).save(movie);
     }
@@ -43,7 +44,7 @@ public class JPACreateMovieTest {
                 Optional.of("fake_release")
         );
         when(movieJPARepository.findByTitle(existingMovie.getTitle()))
-                .thenReturn(Optional.of(Collections.singletonList(existingMovie)));
+                .thenReturn(Collections.singletonList(Movie.create("a", "b", Optional.empty())));
         assertThrows(MovieAlreadyExist.class, () -> sut.create(existingMovie));
         verify(movieJPARepository, never()).save(existingMovie);
     }
