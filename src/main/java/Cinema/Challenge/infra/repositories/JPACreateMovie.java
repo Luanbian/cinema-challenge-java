@@ -14,8 +14,9 @@ import java.util.Optional;
 public class JPACreateMovie implements ICreateRepository<Movie> {
     @Autowired
     MovieJPARepository movieJPARepository;
+
     @Override
-    public void create(Movie data) throws MovieAlreadyExist {
+    public void create(Movie data) {
         Optional<List<Movie>> movies = this.movieJPARepository.findByTitle(data.getTitle());
         if(movies.isPresent()) {
             throw new MovieAlreadyExist();
