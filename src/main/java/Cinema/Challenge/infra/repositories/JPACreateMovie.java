@@ -12,8 +12,12 @@ import java.util.Optional;
 
 @Service
 public class JPACreateMovie implements ICreateRepository<Movie> {
+    private final MovieJPARepository movieJPARepository;
+
     @Autowired
-    MovieJPARepository movieJPARepository;
+    public JPACreateMovie (MovieJPARepository movieJPARepository) {
+        this.movieJPARepository = movieJPARepository;
+    }
 
     @Override
     public void create(Movie data) {
