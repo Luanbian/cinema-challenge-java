@@ -4,6 +4,7 @@ import Cinema.Challenge.domain.entities.Movie;
 import Cinema.Challenge.infra.interfaces.MovieJPARepository;
 import static org.junit.jupiter.api.Assertions.*;
 
+import Cinema.Challenge.presentation.Exceptions.MovieNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -13,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -34,19 +36,26 @@ public class JPAFindMovieTest {
     }
     @Test
     public void should_be_able_to_list_all_movies() {
+        when(movieJPARepository.findAll()).thenReturn(movies);
         List<Movie> response = sut.findAll();
         verify(movieJPARepository, times(1)).findAll();
         assertEquals(response, movieJPARepository.findAll());
+        assertEquals(movieJPARepository.findAll().size(), response.size());
     }
     @Test
-    public void should_be_able_to_find_movie_by_title() {
-       String title = "real_title";
-       Optional<List<Movie>> response = sut.findByTitle(title);
-       verify(movieJPARepository, times(1)).findByTitle(title);
-       assertEquals(response, movieJPARepository.findByTitle(title));
-       if (response.isPresent()) {
-           assertEquals(response.get().get(1).getTitle(), movies.get(1).getTitle());
-           assertEquals(response.get().size(), movies.size());
-       }
+    public void should_be_called_with_correct_param() {
+        String title = "real_title";
+        List<Movie> filtered = movies.stream().filter(t -> t.getTitle().equals(title)).toList();
+        when(movieJPARepository.findByTitle(title)).thenReturn(filtered);
+        sut.findByTitle(title);
+        verify(movieJPARepository, times(1)).findByTitle(title);
+        assertEquals(movieJPARepository.findByTitle(title).get(0).getTitle(), title);
+    }
+    @Test
+    public void should_throw_if_movie_not_be_found() {
+        String invalidTitle = "invalid_title";
+        List<Movie> empty = Collections.emptyList();
+        when(movieJPARepository.findByTitle(invalidTitle)).thenReturn(empty);
+        assertThrows(MovieNotFound.class, () -> sut.findByTitle(invalidTitle));
     }
 }
