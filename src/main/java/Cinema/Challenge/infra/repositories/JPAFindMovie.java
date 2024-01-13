@@ -3,11 +3,12 @@ package Cinema.Challenge.infra.repositories;
 import Cinema.Challenge.domain.entities.Movie;
 import Cinema.Challenge.infra.interfaces.IFindRepository;
 import Cinema.Challenge.infra.interfaces.MovieJPARepository;
+import Cinema.Challenge.presentation.Exceptions.MovieNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
+
 @Service
 public class JPAFindMovie implements IFindRepository<Movie> {
     private final MovieJPARepository movieJPARepository;
@@ -22,7 +23,11 @@ public class JPAFindMovie implements IFindRepository<Movie> {
     }
 
     @Override
-    public Optional<List<Movie>> findByTitle(String title) {
-        return movieJPARepository.findByTitle(title);
+    public List<Movie> findByTitle(String title) {
+        List<Movie> movies = movieJPARepository.findByTitle(title);
+        if (!movies.isEmpty()) {
+            return movies;
+        }
+        throw new MovieNotFound();
     }
 }
