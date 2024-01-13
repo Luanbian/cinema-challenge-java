@@ -11,6 +11,7 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -39,14 +40,13 @@ public class CreateMovieTest {
         assertEquals("release_test", result.getReleaseDate());
     }
     @Test
-    public void should_throw_if_movie_already_exists() throws MovieAlreadyExist {
+    public void should_throw_if_movie_already_exists() {
         MovieDto data = new MovieDto(
                 "Title_test",
                 "synopsis_test",
                 Optional.of("release_test")
         );
-        Movie movie = Movie.create(data.title(), data.synopsis(), data.releaseDate());
-        doThrow(new MovieAlreadyExist()).when(repository).create(movie);
-        assertThrows(MovieAlreadyExist.class, () -> repository.create(movie));
+        doThrow(new MovieAlreadyExist()).when(repository).create(any(Movie.class));
+        assertThrows(MovieAlreadyExist.class, () -> sut.perform(data));
     }
 }
