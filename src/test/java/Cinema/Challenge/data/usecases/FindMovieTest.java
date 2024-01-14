@@ -3,6 +3,8 @@ package Cinema.Challenge.data.usecases;
 import Cinema.Challenge.domain.entities.Movie;
 import Cinema.Challenge.infra.interfaces.IFindRepository;
 import static org.junit.jupiter.api.Assertions.*;
+
+import Cinema.Challenge.presentation.Exceptions.MovieNotFound;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -12,6 +14,7 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,5 +54,12 @@ public class FindMovieTest {
         verify(repository, times(1)).findByTitle(title);
         verify(repository, never()).findAll();
         assertEquals(response, repository.findByTitle(title));
+    }
+    @Test
+    public void should_throw_if_movie_not_found() {
+        String invalidTitle = "invalid_title";
+        List<Movie> empty = Collections.emptyList();
+        when(repository.findByTitle(invalidTitle)).thenReturn(empty);
+        assertThrows(MovieNotFound.class, () -> sut.perform(Optional.of(invalidTitle)));
     }
 }
