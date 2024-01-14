@@ -5,10 +5,11 @@ import Cinema.Challenge.domain.entities.Movie;
 import Cinema.Challenge.infra.interfaces.IFindRepository;
 import Cinema.Challenge.presentation.Exceptions.MovieNotFound;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-
+@Service
 public class FindMovie implements IFind<Movie> {
     private final IFindRepository<Movie> repository;
     @Autowired
