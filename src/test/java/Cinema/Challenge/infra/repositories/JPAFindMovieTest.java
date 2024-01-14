@@ -52,10 +52,11 @@ public class JPAFindMovieTest {
         assertEquals(movieJPARepository.findByTitle(title).get(0).getTitle(), title);
     }
     @Test
-    public void should_throw_if_movie_not_be_found() {
+    public void should_return_empty_list_if_movie_not_be_found() {
         String invalidTitle = "invalid_title";
         List<Movie> empty = Collections.emptyList();
         when(movieJPARepository.findByTitle(invalidTitle)).thenReturn(empty);
-        assertThrows(MovieNotFound.class, () -> sut.findByTitle(invalidTitle));
+        List<Movie> response = sut.findByTitle(invalidTitle);
+        assertEquals(response, empty);
     }
 }

@@ -25,9 +25,6 @@ public class JPAFindMovie implements IFindRepository<Movie> {
     @Override
     public List<Movie> findByTitle(String title) {
         List<Movie> movies = movieJPARepository.findByTitle(title);
-        if (!movies.isEmpty()) {
-            return movies;
-        }
-        throw new MovieNotFound();
+        return movies;
     }
 }
